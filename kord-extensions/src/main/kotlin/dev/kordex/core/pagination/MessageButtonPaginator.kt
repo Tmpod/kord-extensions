@@ -42,7 +42,7 @@ public class MessageButtonPaginator(
 	public val targetMessage: Message? = null,
 ) : BaseButtonPaginator(pages, chunkedPages, owner, timeoutSeconds, keepEmbed, switchEmoji, mutator, locale) {
 	init {
-		require(targetChannel == null && targetMessage == null) {
+		require(targetChannel != null && targetMessage != null) {
 			"Must provide either a target channel or target message"
 		}
 	}
