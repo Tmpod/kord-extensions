@@ -15,6 +15,9 @@ import dev.kordex.core.components.components
 import dev.kordex.core.components.forms.ModalForm
 import dev.kordex.core.components.forms.widgets.LineTextWidget
 import dev.kordex.core.components.forms.widgets.ParagraphTextWidget
+import dev.kordex.core.components.forms.widgets.menus.ChannelSelectMenuWidget
+import dev.kordex.core.components.forms.widgets.menus.MentionableSelectMenuWidget
+import dev.kordex.core.components.forms.widgets.menus.StringSelectMenuWidget
 import dev.kordex.core.components.publicButton
 import dev.kordex.core.extensions.Extension
 import dev.kordex.core.extensions.publicMessageCommand
@@ -23,6 +26,7 @@ import dev.kordex.core.extensions.publicUserCommand
 import dev.kordex.i18n.Key
 import dev.kordex.i18n.toKey
 import dev.kordex.test.bot.Translations
+import kotlinx.coroutines.runBlocking
 
 public class ModalTestExtension : Extension() {
 	override val name: String = "kordex.modals"
@@ -41,13 +45,23 @@ public class ModalTestExtension : Extension() {
 							return@buildString
 						}
 
-						append("**Line:** `")
-						appendLine(modal.line.value)
-						append("`")
+ 						append("**Line:** `")
+ 						appendLine(modal.line.value)
+ 						append("`")
+ 						appendLine()
+
+ 						appendLine("**Paragraph:** ```")
+ 						appendLine(modal.paragraph.value)
+ 						append("```")
+ 						appendLine()
+
+						appendLine("**Mentionable Select:** ```")
+						appendLine(modal.mentionableSelect.value)
+						append("```")
 						appendLine()
 
-						appendLine("**Paragraph:** ```")
-						appendLine(modal.paragraph.value)
+						appendLine("**String Select:** ```")
+						appendLine(modal.stringSelect.value)
 						append("```")
 						appendLine()
 					}
@@ -67,13 +81,28 @@ public class ModalTestExtension : Extension() {
 							return@buildString
 						}
 
-						append("**Line:** `")
-						appendLine(modal.line.value)
-						append("`")
+ 						append("**Line:** `")
+ 						appendLine(modal.line.value)
+ 						append("`")
+ 						appendLine()
+
+ 						appendLine("**Paragraph:** ```")
+ 						appendLine(modal.paragraph.value)
+ 						append("```")
+ 						appendLine()
+
+						appendLine("**Channel Select:** ```")
+						appendLine(modal.channelSelect.value)
+						append("```")
 						appendLine()
 
-						appendLine("**Paragraph:** ```")
-						appendLine(modal.paragraph.value)
+						appendLine("**Mentionable Select:** ```")
+						appendLine(modal.mentionableSelect.value)
+						append("```")
+						appendLine()
+
+						appendLine("**String Select:** ```")
+						appendLine(modal.stringSelect.value)
 						append("```")
 						appendLine()
 					}
@@ -104,13 +133,28 @@ public class ModalTestExtension : Extension() {
 												return@buildString
 											}
 
-											append("**Line:** `")
-											appendLine(modal.line.value)
-											append("`")
+ 											append("**Line:** `")
+ 											appendLine(modal.line.value)
+ 											append("`")
+ 											appendLine()
+
+ 											appendLine("**Paragraph:** ```")
+ 											appendLine(modal.paragraph.value)
+ 											append("```")
+ 											appendLine()
+
+											appendLine("**Channel Select:** ```")
+											appendLine(modal.channelSelect.value)
+											append("```")
 											appendLine()
 
-											appendLine("**Paragraph:** ```")
-											appendLine(modal.paragraph.value)
+											appendLine("**Mentionable Select:** ```")
+											appendLine(modal.mentionableSelect.value)
+											append("```")
+											appendLine()
+
+											appendLine("**String Select:** ```")
+											appendLine(modal.stringSelect.value)
 											append("```")
 											appendLine()
 										}
@@ -140,13 +184,28 @@ public class ModalTestExtension : Extension() {
 								return@buildString
 							}
 
-							append("**Line:** `")
-							appendLine(modal.line.value)
-							append("`")
+ 							append("**Line:** `")
+ 							appendLine(modal.line.value)
+ 							append("`")
+ 							appendLine()
+
+ 							appendLine("**Paragraph:** ```")
+ 							appendLine(modal.paragraph.value)
+ 							append("```")
+ 							appendLine()
+
+							appendLine("**Channel Select:** ```")
+							appendLine(modal.channelSelect.value)
+							append("```")
 							appendLine()
 
-							appendLine("**Paragraph:** ```")
-							appendLine(modal.paragraph.value)
+							appendLine("**Mentionable Select:** ```")
+							appendLine(modal.mentionableSelect.value)
+							append("```")
+							appendLine()
+
+							appendLine("**String Select:** ```")
+							appendLine(modal.stringSelect.value)
 							append("```")
 							appendLine()
 						}
@@ -156,24 +215,44 @@ public class ModalTestExtension : Extension() {
 		}
 	}
 
-	public inner class Args : Arguments() {
+	public class Args : Arguments() {
 		public val str: String by string {
 			name = "string".toKey()
 			description = "A string argument".toKey()
 		}
 	}
 
-	public inner class Modal : ModalForm() {
+	public class Modal : ModalForm() {
 		override var title: Key = Translations.Modal.title
 
-		public val line: LineTextWidget = lineText {
-			label = Translations.Modal.line
-			placeholder = Translations.Modal.Line.placeholder
+ 		public val line: LineTextWidget = lineText {
+ 			label = Translations.Modal.line
+ 			placeholder = Translations.Modal.Line.placeholder
+ 		}
+
+ 		public val paragraph: ParagraphTextWidget = paragraphText {
+ 			label = Translations.Modal.paragraph
+ 			placeholder = Translations.Modal.Paragraph.placeholder
+ 		}
+
+		public val channelSelect: ChannelSelectMenuWidget = channelSelect {
+			label = Translations.Modal.channelSelect
+			placeholder = Translations.Modal.ChannelSelect.placeholder
 		}
 
-		public val paragraph: ParagraphTextWidget = paragraphText {
-			label = Translations.Modal.paragraph
-			placeholder = Translations.Modal.Paragraph.placeholder
+		public val mentionableSelect: MentionableSelectMenuWidget = mentionableSelect {
+			label = Translations.Modal.mentionableSelect
+			placeholder = Translations.Modal.MentionableSelect.placeholder
+			maxValues = 3
+		}
+
+		public val stringSelect: StringSelectMenuWidget = stringSelect {
+			runBlocking {
+				label = Translations.Modal.stringSelect
+				placeholder = Translations.Modal.StringSelect.placeholder
+				option(Translations.Modal.StringSelect.option1, "test1")
+				option(Translations.Modal.StringSelect.option2, "test2")
+			}
 		}
 	}
 }

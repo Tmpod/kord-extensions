@@ -8,11 +8,12 @@
 
 package dev.kordex.core.components.forms.widgets
 
-import dev.kord.rest.builder.component.ActionRowBuilder
+import dev.kord.rest.builder.component.LabelComponentBuilder
+import dev.kordex.i18n.Key
 import java.util.*
 
 /** Abstract type representing a grid-based widget. **/
-public abstract class Widget<T : Any?> {
+public abstract class Widget<T> {
 	/** How wide this widget is, in grid cells. **/
 	public abstract var width: Int
 		protected set
@@ -25,11 +26,19 @@ public abstract class Widget<T : Any?> {
 	public abstract var value: T
 		protected set
 
+	/** The Widget's label, displayed on Discord. **/
+	public abstract var label: Key
+		protected set
+
+	/** An optional description for the Widget. Displayed on Discord. **/
+	public abstract var description: Key?
+		protected set
+
 	override fun toString(): String =
 		"${this::class.simpleName}@${hashCode()} ($width x $height)"
 
 	/** Function called to apply this widget to a Discord action row. **/
-	public abstract suspend fun apply(builder: ActionRowBuilder, locale: Locale)
+	public abstract suspend fun apply(builder: LabelComponentBuilder, locale: Locale)
 
 	/** Function called to ensure that this widget was set up correctly. **/
 	public abstract fun validate()
