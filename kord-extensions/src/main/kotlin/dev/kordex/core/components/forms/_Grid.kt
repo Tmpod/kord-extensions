@@ -10,10 +10,9 @@
 
 package dev.kordex.core.components.forms
 
-import dev.kordex.core.components.forms.widgets.Widget
 import dev.kordex.core.utils.map
 
-public typealias WidgetGrid = Array<MutableList<Widget<*>?>>
+public typealias WidgetGrid = Array<MutableList<Widget?>>
 
 /** A coordinate pair, represented by a `Pair(row, column)`. **/
 public typealias CoordinatePair = Pair<Int, Int>
@@ -173,18 +172,18 @@ public fun WidgetGrid.toString(): String = buildString {
 @Suppress("USELESS_CAST", "SpreadOperator")  // You're just wrong here, IJ
 public fun WidgetGrid(): WidgetGrid = arrayOf(
 	*GRID_HEIGHT.map {
-		GRID_WIDTH.map { null as Widget<*>? }.toMutableList()
+		GRID_WIDTH.map { null as Widget? }.toMutableList()
 	}.toTypedArray()
 )
 
-public fun WidgetGrid.get(coordinate: CoordinatePair): Widget<*>? {
+public fun WidgetGrid.get(coordinate: CoordinatePair): Widget? {
 	coordinate.throwIfInvalid()
 
 	return this[coordinate.first].getOrNull(coordinate.second)
 }
 
 @Suppress("UnnecessaryParentheses")
-public fun WidgetGrid.setAtCoordinateOrFirstRow(coordinate: CoordinatePair?, widget: Widget<*>) {
+public fun WidgetGrid.setAtCoordinateOrFirstRow(coordinate: CoordinatePair?, widget: Widget) {
 	if (coordinate == null) {
 		val row = indexOfFirst { (GRID_WIDTH - it.count { e -> e != null }) >= widget.width }
 
@@ -200,7 +199,7 @@ public fun WidgetGrid.setAtCoordinateOrFirstRow(coordinate: CoordinatePair?, wid
 	}
 }
 
-public fun WidgetGrid.set(coordinate: CoordinatePair, widget: Widget<*>) {
+public fun WidgetGrid.set(coordinate: CoordinatePair, widget: Widget) {
 	coordinate.throwIfInvalid("Start coordinate")
 
 	val end = coordinate + (widget.height - 1 x widget.width - 1)
@@ -228,19 +227,19 @@ public fun WidgetGrid.removeAt(coordinate: CoordinatePair): Boolean =
 		false
 	}
 
-public fun WidgetGrid.remove(widget: Widget<*>): Boolean {
+public fun WidgetGrid.remove(widget: Widget): Boolean {
 	val coordinates = coordinatesFor(widget)
 
 	if (coordinates.isEmpty()) {
 		return false
 	}
 
-	coordinates.map(::removeAt)
+	coordinates.forEach(::removeAt)
 
 	return true
 }
 
-public fun WidgetGrid.coordinatesFor(widget: Widget<*>): List<CoordinatePair> {
+public fun WidgetGrid.coordinatesFor(widget: Widget): List<CoordinatePair> {
 	val values = mutableListOf<CoordinatePair>()
 
 	forEachIndexed { rowIndex, row ->
@@ -254,13 +253,13 @@ public fun WidgetGrid.coordinatesFor(widget: Widget<*>): List<CoordinatePair> {
 	return values
 }
 
-public fun WidgetGrid.getWidgetSet(): Set<Widget<*>> {
-	val values = mutableSetOf<Widget<*>>()
+public fun WidgetGrid.getWidgetSet(): Set<Widget> {
+	val values = mutableSetOf<Widget>()
 
 	forEach { row ->
-		row.forEach { widget ->
-			if (widget != null) {
-				values.add(widget)
+		row.forEach { component ->
+			if (component != null) {
+				values.add(component)
 			}
 		}
 	}

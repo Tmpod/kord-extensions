@@ -15,7 +15,7 @@ import dev.kordex.i18n.Key
 import java.util.*
 
 /** A checkbox widget that supports multiple checkboxes. **/
-public class CheckboxGroupWidget : Widget<List<String>>(), KordExKoinComponent {
+public class CheckboxGroupWidget : InteractableWidget<List<String>>(), KordExKoinComponent {
 	@Suppress("MagicNumber")
 	override var width: Int = 5
 	override var height: Int = 1

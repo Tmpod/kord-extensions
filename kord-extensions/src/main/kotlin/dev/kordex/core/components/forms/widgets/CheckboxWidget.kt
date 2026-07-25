@@ -14,7 +14,7 @@ import dev.kordex.i18n.Key
 import java.util.*
 
 /** A checkbox widget that supports a single checkbox. **/
-public class CheckboxWidget : Widget<Boolean?>(), KordExKoinComponent {
+public class CheckboxWidget : InteractableWidget<Boolean?>(), KordExKoinComponent {
 	@Suppress("MagicNumber")
 	override var width: Int = 5
 	override var height: Int = 1

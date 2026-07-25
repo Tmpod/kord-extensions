@@ -16,7 +16,7 @@ import java.util.Locale
 import java.util.UUID
 
 /** A widget for uploading files to discord. **/
-public class FileUploadWidget : Widget<List<Snowflake>?>(), KordExKoinComponent {
+public class FileUploadWidget : InteractableWidget<List<Snowflake>?>(), KordExKoinComponent {
 	@Suppress("MagicNumber")
 	override var width: Int = 5
 	override var height: Int = 1

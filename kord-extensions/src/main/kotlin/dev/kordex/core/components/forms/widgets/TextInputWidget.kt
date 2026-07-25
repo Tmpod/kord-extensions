@@ -29,7 +29,7 @@ public const val LABEL_LENGTH: Int = 45
 public const val TEXT_INPUT_PLACEHOLDER_LENGTH: Int = 100
 
 /** An abstract type representing a widget that accepts text from the user. */
-public abstract class TextInputWidget<T : TextInputWidget<T>> : Widget<String?>(), KordExKoinComponent {
+public abstract class TextInputWidget<T : TextInputWidget<T>> : InteractableWidget<String?>(), KordExKoinComponent {
 	private val logger = KotlinLogging.logger { }
 
 	@Suppress("MagicNumber")

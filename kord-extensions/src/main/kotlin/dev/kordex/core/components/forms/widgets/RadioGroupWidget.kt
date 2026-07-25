@@ -21,7 +21,7 @@ private const val MIN_OPTIONS: Int = 2
 private const val MAX_OPTIONS: Int = 10
 
 /** A widget for selecting exactly one option from a defined list. **/
-public class RadioGroupWidget : Widget<String?>(), KordExKoinComponent {
+public class RadioGroupWidget : InteractableWidget<String?>(), KordExKoinComponent {
 	@Suppress("MagicNumber")
 	override var height: Int = 5
 	override var width: Int = 1

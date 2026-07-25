@@ -9,19 +9,13 @@
 package dev.kordex.core.components.forms.widgets
 
 import dev.kord.rest.builder.component.LabelComponentBuilder
+import dev.kord.rest.builder.interaction.ModalBuilder
+import dev.kordex.core.components.forms.Widget
 import dev.kordex.i18n.Key
 import java.util.*
 
-/** Abstract type representing a grid-based widget. **/
-public abstract class Widget<T> {
-	/** How wide this widget is, in grid cells. **/
-	public abstract var width: Int
-		protected set
-
-	/** How tall this widget is, in grid cells. **/
-	public abstract var height: Int
-		protected set
-
+/** Abstract type representing an interactable [Widget]. **/
+public abstract class InteractableWidget<T> : Widget() {
 	/** The final value stored in this widget, as provided by the user. **/
 	public abstract var value: T
 		protected set
@@ -34,12 +28,11 @@ public abstract class Widget<T> {
 	public abstract var description: Key?
 		protected set
 
-	override fun toString(): String =
-		"${this::class.simpleName}@${hashCode()} ($width x $height)"
-
-	/** Function called to apply this widget to a Discord action row. **/
 	public abstract suspend fun apply(builder: LabelComponentBuilder, locale: Locale)
 
-	/** Function called to ensure that this widget was set up correctly. **/
-	public abstract fun validate()
+	public final override suspend fun apply(builder: ModalBuilder, locale: Locale) {
+		builder.label(label.withLocale(locale).translate()) {
+			apply(this, locale)
+		}
+	}
 }

@@ -56,6 +56,21 @@ public abstract class ModalForm : Form(), KordExKoinComponent {
 	/** ID representing this modal on Discord. **/
 	public var id: String = UUID.randomUUID().toString()
 
+	/** A component representing Markdown-formatted text content. **/
+	public fun textDisplay(
+		coordinate: CoordinatePair? = null,
+		builder: FormTextDisplay.() -> Unit,
+	): FormTextDisplay {
+		val component = FormTextDisplay()
+
+		builder(component)
+		component.validate()
+
+		grid.setAtCoordinateOrFirstRow(coordinate, component)
+
+		return component
+	}
+
 	/** A widget representing a single-line text input. **/
 	public fun lineText(
 		coordinate: CoordinatePair? = null,
@@ -216,12 +231,14 @@ public abstract class ModalForm : Form(), KordExKoinComponent {
 	public suspend fun call(event: ModalSubmitInteractionCreateEvent) {
 		val interaction = event.interaction
 
-		grid.filter { it.isNotEmpty() }.flatten().forEach { widget -> getWidgetValue(widget, interaction)  }
+		grid.filter { it.isNotEmpty() }.flatten()
+			.filterIsInstance<InteractableWidget<*>>()
+			.forEach { component -> getWidgetValue(component, interaction)  }
 
 		bot.send(ModalInteractionCompleteEvent(id, interaction))
 	}
 
-	private fun getWidgetValue(widget: Widget<*>?, interaction: ModalSubmitInteraction) {
+	private fun getWidgetValue(widget: InteractableWidget<*>?, interaction: ModalSubmitInteraction) {
 		when (widget) {
 			is TextInputWidget<*> -> interaction.textInputs[widget.id]?.value?.let(widget::setValue)
 
@@ -251,19 +268,17 @@ public abstract class ModalForm : Form(), KordExKoinComponent {
 
 	/** Given a ModalBuilder, apply this modal's widgets for display on Discord. **/
 	public suspend fun applyToBuilder(builder: ModalBuilder, locale: Locale) {
-		val appliedWidgets = mutableSetOf<Widget<*>>()
+		val appliedComponents = mutableSetOf<Widget>()
 
 		grid.forEach { row ->
 			val filteredRow = row.filterNotNull()
-				.filter { it !in appliedWidgets }
+				.filter { it !in appliedComponents }
 
 			if (filteredRow.isNotEmpty()) {
-				filteredRow.forEach { widget ->
-					if (widget !in appliedWidgets) {
-						builder.label(widget.label.withLocale(locale).translate()) {
-							widget.apply(this, locale)
-							appliedWidgets.add(widget)
-						}
+				filteredRow.forEach { component ->
+					if (component !in appliedComponents) {
+						component.apply(builder, locale)
+						appliedComponents.add(component)
 					}
 				}
 			}
