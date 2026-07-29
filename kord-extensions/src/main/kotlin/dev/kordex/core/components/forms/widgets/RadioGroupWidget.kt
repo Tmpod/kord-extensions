@@ -23,8 +23,8 @@ private const val MAX_OPTIONS: Int = 10
 /** A widget for selecting exactly one option from a defined list. **/
 public class RadioGroupWidget : InteractableWidget<String?>(), KordExKoinComponent {
 	@Suppress("MagicNumber")
-	override var height: Int = 5
-	override var width: Int = 1
+	override var width: Int = 5
+	override var height: Int = 1
 	override var value: String? = null
 
 	/** The widget's unique ID on Discord, defaulting to a UUID. **/
