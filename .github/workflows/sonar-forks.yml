@@ -23,6 +23,8 @@ jobs:
           path: "./base"
           ref: "${{ github.event.pull_request.base.sha }}"
 
+          allow-unsafe-pr-checkout: true
+
       - name: "Checkout PR"
         uses: actions/checkout@v4
 
